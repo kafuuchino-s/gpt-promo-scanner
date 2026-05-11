@@ -59,13 +59,13 @@ token = "eyJhbGciOi..."
 # 全自动扫描所有地区（自动切节点 + 价格收集）
 python auto_scan.py
 
-# 只扫描英国
+# 只扫描指定地区（如英国 GB）
 python auto_scan.py GB
 
 # 批量发现新促销码（全矩阵交叉扫描）
 python discover_codes.py --cross
 
-# 发现英国的新码
+# 发现指定地区的新码
 python discover_codes.py GB
 ```
 
@@ -74,9 +74,9 @@ python discover_codes.py GB
 | 命令 | 说明 |
 |------|------|
 | `python auto_scan.py` | 全自动扫描所有地区 |
-| `python auto_scan.py GB` | 只扫描指定地区 |
+| `python auto_scan.py <地区>` | 只扫描指定地区，如 `GB`、`US` |
 | `python auto_scan.py --list` | 列出支持的地区 |
-| `python auto_scan.py GB --open` | 扫描后自动打开 Stripe URL |
+| `python auto_scan.py <地区> --open` | 扫描后自动打开 Stripe URL |
 | `python auto_scan.py --no-price` | 跳过价格收集（更快） |
 
 扫描结果保存在：
@@ -87,9 +87,9 @@ python discover_codes.py GB
 
 | 命令 | 说明 |
 |------|------|
-| `python discover_codes.py GB` | 批量发现英国新码 |
-| `python discover_codes.py GB --preview` | 预览候选码（不验证） |
-| `python discover_codes.py GB --auto-scan` | 发现后自动验证价格 |
+| `python discover_codes.py <地区>` | 批量发现指定地区新码 |
+| `python discover_codes.py <地区> --preview` | 预览候选码（不验证） |
+| `python discover_codes.py <地区> --auto-scan` | 发现后自动验证价格 |
 | `python discover_codes.py --cross` | 全矩阵交叉扫描 |
 | `python discover_codes.py --list` | 列出支持的国家 |
 
