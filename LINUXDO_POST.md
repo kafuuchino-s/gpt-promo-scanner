@@ -1,7 +1,7 @@
 # 看这里就行了！最低价48月GPT Business也许就在这里，感谢佬友思路
 
 > 本文首发于 [LinuxDo](https://linux.do)
-> 开源工具: [GitHub](https://github.com/JUk1-GH/chatgpt-team-scanner)
+> 开源工具: [GitHub](https://github.com/JUk1-GH/gpt-promo-scanner)
 > 最后更新: 2026-05-11
 
 ---

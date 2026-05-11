@@ -20,8 +20,8 @@
 ### 1. 安装
 
 ```bash
-git clone <your-repo-url>
-cd chatgpt-team-scanner
+git clone https://github.com/JUk1-GH/gpt-promo-scanner.git
+cd gpt-promo-scanner
 pip install -r requirements.txt
 ```
 
