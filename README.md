@@ -95,23 +95,18 @@ python discover_codes.py GB
 
 结果保存在 `discovery_{国家码}.json`。
 
-## 已知有效码
+## 有效促销码
 
-### US — 当前账户可直接使用
-
-| 促销码 | 价格(2人月付) | 折扣 | 公司 |
-|--------|-------------|------|------|
-| `thealloynetwork` | $30/月 | 40% | The Alloy Network |
-| `alongsideus` | $30/月 | 40% | Alongside |
-| `monicaius` | $30/月 | 40% | Monica AI |
-| `talentgeniusus` | $25/月 | 50% | TalentGenius |
-| `firstfocusus` | $25/月 | 50% | First Focus |
-| `wildmangous` | $25/月 | 50% | WildMango |
-
-### 其他地区 — 需对应节点付款
+所有码均适用 ChatGPT Business 计划，48 个月固定折扣。US 码可直接用，其他地区需切对应节点付款。价格为税前实付，修改账单地址可免税费。
 
 | 促销码 | 地区 | 原价(2人) | 实付(税前) | 折扣 | ≈ USD | 公司 |
 |--------|------|----------|-----------|------|-------|------|
+| `thealloynetwork` | 🇺🇸 US | $50 | $30.00/月 | 40% | $30/月 | The Alloy Network |
+| `alongsideus` | 🇺🇸 US | $50 | $30.00/月 | 40% | $30/月 | Alongside |
+| `monicaius` | 🇺🇸 US | $50 | $30.00/月 | 40% | $30/月 | Monica AI |
+| `talentgeniusus` | 🇺🇸 US | $50 | $25.00/月 | 50% | $25/月 | TalentGenius |
+| `firstfocusus` | 🇺🇸 US | $50 | $25.00/月 | 50% | $25/月 | First Focus |
+| `wildmangous` | 🇺🇸 US | $50 | $25.00/月 | 50% | $25/月 | WildMango |
 | `codestonede` | 🇩🇪 DE | €52 | €15.13/月 | 71% | $18/月 | Codestone |
 | `codestonees` | 🇪🇸 ES | €52 | €14.89/月 | 65% | $18/月 | Codestone |
 | `codestonefr` | 🇫🇷 FR | €52 | €15.01/月 | 65% | $18/月 | Codestone |
