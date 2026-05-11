@@ -30,5 +30,8 @@ discovery_*.json
 results.json
 price_calc_results.json
 
+# 促销码数据（本地使用，不公开）
+known_codes.json
+
 # 去重缓存
 .candidates_*.txt
