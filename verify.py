@@ -136,7 +136,7 @@ def classify(result):
         return f"unknown({result.get('reason_code', '?')})"
 
 def main():
-    if TOKEN == "在这里粘贴你的accessToken":
+    if TOKEN == "在此填入你的 accessToken" or TOKEN == "在这里粘贴你的accessToken":
         print("错误: 请先设置 TOKEN（从 chatgpt.com 获取 accessToken）")
         print("获取方法: 在 chatgpt.com F12 Console 执行:")
         print('  const s = await (await fetch("/api/auth/session")).json(); console.log(s.accessToken);')

@@ -475,7 +475,8 @@ def batch_check(candidates, delay=0.2):
         sys.exit(1)
 
     session = cffi_requests.Session(impersonate="chrome136")
-    session.proxies = {"https": "http://127.0.0.1:7890", "http": "http://127.0.0.1:7890"}
+    proxy_url = config.get_proxy_url()
+    session.proxies = {"https": proxy_url, "http": proxy_url}
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         "Accept": "application/json",
