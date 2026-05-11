@@ -11,13 +11,14 @@ import json
 import time
 import subprocess
 import webbrowser
-import re
 from urllib.parse import quote
 
-CLASH_SOCKET = "/tmp/verge/verge-mihomo.sock"
-AI_GROUP = "🤖 AI"  # ChatGPT 流量走这个组（规则模式）
-GLOBAL_GROUP = "GLOBAL"  # 全局模式走这个组
-PROXY_URL = "http://127.0.0.1:7890"
+import config
+
+CLASH_SOCKET = config.get_clash_socket()
+AI_GROUP = "🤖 AI"
+GLOBAL_GROUP = "GLOBAL"
+PROXY_URL = config.get_proxy_url()
 
 REGIONS = {
     "GB": {
@@ -171,10 +172,7 @@ def get_current_node():
 # ─── Checkout API ───────────────────────────────────────────
 
 def _get_token():
-    with open('/Volumes/SSD/oaipromo/verify.py', 'r') as f:
-        content = f.read()
-    match = re.search(r'TOKEN = "([^"]+)"', content)
-    return match.group(1)
+    return config.get_token()
 
 def try_checkout(promo_code, country, currency):
     """调用 checkout API，返回 (url_or_None, status, error_msg)"""
