@@ -50,7 +50,7 @@ REGIONS = {
     },
     "AU": {
         "keywords": ["澳洲", "澳大利亚", "🇦🇺"],
-        "codes": [("firstfocus", "AU", "AUD"), ("talentgeniusau", "AU", "AUD")],
+        "codes": [("talentgeniusau", "AU", "AUD")],
         "label": "🇦🇺 澳洲",
     },
     "DE": {

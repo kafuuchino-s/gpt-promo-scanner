@@ -43,7 +43,6 @@ REGIONS = {
     "AU": {
         "keywords": ["澳洲", "澳大利亚", "🇦🇺"],
         "codes": [
-            ("firstfocus", "AUD", "First Focus", "A$45/月"),
             ("talentgeniusau", "AUD", "TalentGenius", "A$35/月"),
         ],
     },
@@ -205,7 +204,7 @@ def get_stripe_url(code, country, currency):
 def cmd_list():
     """列出所有可用码"""
     print(f"\n{'='*60}")
-    print(f"ChatGPT Team 促销码列表（共 25 个码，覆盖 15 个地区）")
+    print(f"ChatGPT Team 促销码列表（共 24 个码，覆盖 15 个地区）")
     print(f"{'='*60}")
 
     for rc in sorted(REGIONS.keys()):
