@@ -493,13 +493,78 @@ def _load_token():
     return config.get_token()
 
 
-# ─── 验证（eligibility API，不需要切节点）────────────────────
+# ─── Token 验证（必读: token 过期静默返回 invalid_code）────
+
+VALIDATION_CODES = ["thealloynetwork", "talentgeniusuk"]  # 已知有效码
+
+
+def validate_token():
+    """验证 accessToken 是否仍然有效
+
+    用已知有效码调 eligibility API，若返回 invalid_code 说明 token 已过期。
+    必须在每次批量扫描前调用，否则过期 token 会导致全部 false negative。
+    """
+    from curl_cffi import requests as cffi_requests
+
+    token = _load_token()
+    session = cffi_requests.Session(impersonate="chrome136")
+    proxy_url = config.get_proxy_url()
+    session.proxies = {"https": proxy_url, "http": proxy_url}
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Accept": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+
+    # 依次尝试多个验证码，避免单个码恰好过期时误判
+    last_error = ""
+    for test_code in VALIDATION_CODES:
+        try:
+            url = f"https://chatgpt.com/backend-api/promotions/eligibility/{test_code}?type=promo"
+            resp = session.get(url, headers=headers, timeout=10)
+            data = resp.json()
+            reason = data.get("ineligible_reason", {})
+            rc = reason.get("code", "")
+
+            if data.get("is_eligible") or rc == "user_not_eligible":
+                return  # Token 有效
+
+            if rc == "invalid_code":
+                last_error = f"验证码 '{test_code}' 返回 invalid_code"
+                continue  # 尝试下一个验证码
+
+            last_error = f"未知响应: {str(data)[:100]}"
+        except Exception as e:
+            last_error = f"请求异常: {e}"
+            continue
+
+    # 所有验证码都失败 → token 很可能过期
+    print(f"\n{'='*60}")
+    print(f"❌ Token 验证失败 — 所有验证码均返回 invalid_code")
+    print(f"{'='*60}")
+    print(f"  原因: {last_error}")
+    print(f"\n  ⚠️  accessToken 已过期或无效!")
+    print(f"  ⚠️  继续扫描将全部返回 invalid_code (false negative)")
+    print(f"  ⚠️  之前已浪费了约 70,000 次 API 调用!")
+    print(f"\n  🔧 解决方法:")
+    print(f"     1. 浏览器登录 chatgpt.com")
+    print(f"     2. F12 → Console")
+    print(f"     3. 执行:")
+    print(f"        const s = await (await fetch('/api/auth/session')).json();")
+    print(f"        console.log(s.accessToken);")
+    print(f"     4. 复制新 token 到 config.toml 或环境变量 OPENAI_TOKEN")
+    print(f"{'='*60}\n")
+    sys.exit(1)
+
 
 def batch_check(candidates, delay=0.2):
     """批量验证码是否存在（用 eligibility API，不切节点也能判断存在性）
 
     返回: {code: "EXISTS"|"ELIGIBLE"|"not_found"|"error"}
     """
+    # 先验证 token 是否有效
+    validate_token()
+
     from curl_cffi import requests as cffi_requests
 
     token = _load_token()

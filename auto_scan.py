@@ -492,6 +492,10 @@ def scan_region(code_list, country, currency, collect_price=True):
 
 def run_scan(target_region=None, auto_open=False, collect_price=True):
     """主扫描流程"""
+    # 先验证 token 是否有效（防止过期 token 导致全部 false negative）
+    import discover_codes as dc
+    dc.validate_token()
+
     mode = get_clash_mode()
     group = get_proxy_group()
     current_node, all_nodes = list_nodes()
