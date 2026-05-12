@@ -29,13 +29,19 @@ promo_codes.txt
 scan_results.json
 discovery_*.json
 results.json
+*_results.json
 price_calc_results.json
+.*_progress.json
 
 # 促销码数据
 # known_codes.json 已纳入版本管理
 
 # L站文章草稿
 LINUXDO_POST.md
+new_codes_table.md
+
+# 国家候选列表
+turkish_candidates.txt
 
 # 去重缓存
 .candidates_*.txt
