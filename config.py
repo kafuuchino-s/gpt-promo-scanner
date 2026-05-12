@@ -11,7 +11,10 @@ ChatGPT Team 促销码扫描工具 — 配置模块
   - HTTP_PROXY: HTTP 代理地址
 """
 import os
-import tomllib
+try:
+    import tomllib  # Python 3.11+
+except ModuleNotFoundError:
+    import tomli as tomllib  # Python < 3.11, pip install tomli
 from pathlib import Path
 
 CONFIG_FILE = Path(__file__).parent / "config.toml"
