@@ -45,7 +45,7 @@ OUTPUT_DIR = config.get_output_dir()
 REGIONS = {
     "GB": {
         "keywords": ["英国", "🇬🇧"],
-        "codes": [("aibuildgroupgb", "GB", "GBP"), ("talentgeniusuk", "GB", "GBP")],
+        "codes": [("aibuildgroupgb", "GB", "GBP"), ("talentgeniusuk", "GB", "GBP"), ("datroaiuk", "GB", "GBP")],
         "label": "🇬🇧 英国",
     },
     "AU": {
