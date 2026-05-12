@@ -394,6 +394,12 @@ ChatGPT accessToken 有有效期（通常几小时到几天），过期后 eligi
 
 ---
 
+## Star 趋势
+
+[![Star History Chart](https://api.star-history.com/svg?repos=JUk1-GH/gpt-promo-scanner&type=Date)](https://star-history.com/#JUk1-GH/gpt-promo-scanner&Date)
+
+---
+
 ## 许可
 
 [MIT](LICENSE)

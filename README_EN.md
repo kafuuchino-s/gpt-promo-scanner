@@ -181,6 +181,12 @@ ChatGPT accessTokens expire (hours to days). An expired token causes the eligibi
 | `config.toml.example` | Config template |
 | `known_codes.json` | Known valid codes DB (local use, not committed) |
 
-## License
+---
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=JUk1-GH/gpt-promo-scanner&type=Date)](https://star-history.com/#JUk1-GH/gpt-promo-scanner&Date)
+
+---
 
 [MIT](LICENSE)
