@@ -83,6 +83,24 @@ def get_proxy_url() -> str:
     return cfg.get("proxy", {}).get("url", "http://127.0.0.1:7890")
 
 
+def get_disable_clash() -> bool:
+    """是否禁用 Clash 节点切换（服务器本身已在目标国家时使用）"""
+    env = os.getenv("DISABLE_CLASH")
+    if env and env.lower() in ("1", "true", "yes"):
+        return True
+    cfg = _load_config()
+    return cfg.get("clash", {}).get("disable", False)
+
+
+def get_disable_proxy() -> bool:
+    """是否禁用 HTTP 代理（直连网络，无需本地代理服务）"""
+    env = os.getenv("DISABLE_PROXY")
+    if env and env.lower() in ("1", "true", "yes"):
+        return True
+    cfg = _load_config()
+    return cfg.get("proxy", {}).get("disable", False)
+
+
 def get_proxy_group(mode: str) -> str:
     """根据 Clash 模式返回对应的代理组名
     rule → 🤖 AI    global → GLOBAL

@@ -37,6 +37,8 @@ import config
 
 CLASH_SOCKET = config.get_clash_socket()
 PROXY_URL = config.get_proxy_url()
+DISABLE_CLASH = config.get_disable_clash()
+DISABLE_PROXY = config.get_disable_proxy()
 REQUEST_DELAY = 0.8
 OUTPUT_DIR = config.get_output_dir()
 
@@ -278,7 +280,8 @@ def _get_token():
 def _make_session():
     from curl_cffi import requests as cffi_requests
     session = cffi_requests.Session(impersonate="chrome136")
-    session.proxies = {"https": PROXY_URL, "http": PROXY_URL}
+    if not DISABLE_PROXY:
+        session.proxies = {"https": PROXY_URL, "http": PROXY_URL}
     return session
 
 
@@ -496,30 +499,46 @@ def run_scan(target_region=None, auto_open=False, collect_price=True):
     import discover_codes as dc
     dc.validate_token()
 
-    mode = get_clash_mode()
-    group = get_proxy_group()
-    current_node, all_nodes = list_nodes()
+    if DISABLE_CLASH:
+        # 直连模式：不依赖 Clash，使用服务器原生 IP
+        mode = "disabled"
+        all_nodes = []
 
-    print(f"\n{'='*60}")
-    print(f"🔍 ChatGPT Team 促销码自动扫描")
-    print(f"{'='*60}")
-    print(f"  Clash: {mode.upper()} → {group}  |  节点: {current_node}")
-    print(f"  可用节点: {len(all_nodes)}  |  价格收集: {'✅' if collect_price else '❌跳过'}")
-    print(f"  时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"{'='*60}")
+        print(f"\n{'='*60}")
+        print(f"🔍 ChatGPT Team 促销码自动扫描")
+        print(f"{'='*60}")
+        print(f"  模式: 直连（Clash 已禁用）{'  代理: 已禁用' if DISABLE_PROXY else f'  代理: {PROXY_URL}'}")
+        print(f"  价格收集: {'✅' if collect_price else '❌跳过'}")
+        print(f"  时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"{'='*60}")
+    else:
+        mode = get_clash_mode()
+        group = get_proxy_group()
+        current_node, all_nodes = list_nodes()
+
+        print(f"\n{'='*60}")
+        print(f"🔍 ChatGPT Team 促销码自动扫描")
+        print(f"{'='*60}")
+        print(f"  Clash: {mode.upper()} → {group}  |  节点: {current_node}")
+        print(f"  可用节点: {len(all_nodes)}  |  价格收集: {'✅' if collect_price else '❌跳过'}")
+        print(f"  时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"{'='*60}")
 
     working = []  # [(code, region_label, url, price_info)]
 
     # ── 扫描 US ──
     if not target_region or target_region == "US":
-        us_node = pick_best_node(all_nodes, ["美国", "🇺🇸"])
-        if us_node:
-            print(f"\n{'─'*60}\n🇺🇸 美国 — 切换到: {us_node}\n{'─'*60}")
-            switch_to(us_node)
-            time.sleep(0.5)
-            print(f"    当前: {get_current_node()}")
+        if not DISABLE_CLASH:
+            us_node = pick_best_node(all_nodes, ["美国", "🇺🇸"])
+            if us_node:
+                print(f"\n{'─'*60}\n🇺🇸 美国 — 切换到: {us_node}\n{'─'*60}")
+                switch_to(us_node)
+                time.sleep(0.5)
+                print(f"    当前: {get_current_node()}")
+            else:
+                print(f"\n⚠️  未找到美国节点，仍尝试 US 码")
         else:
-            print(f"\n⚠️  未找到美国节点，仍尝试 US 码")
+            print(f"\n{'─'*60}\n🇺🇸 美国（直连模式）\n{'─'*60}")
 
         us_results = scan_region(
             [(c, co, cu) for c, co, cu in US_CODES],
@@ -534,17 +553,20 @@ def run_scan(target_region=None, auto_open=False, collect_price=True):
         if target_region and rc != target_region:
             continue
 
-        best = pick_best_node(all_nodes, region["keywords"])
-        if not best:
-            if target_region == rc:
-                print(f"\n❌ 未找到 {region['label']} 的节点")
-            continue
+        if not DISABLE_CLASH:
+            best = pick_best_node(all_nodes, region["keywords"])
+            if not best:
+                if target_region == rc:
+                    print(f"\n❌ 未找到 {region['label']} 的节点")
+                continue
 
-        latency = test_latency(best)
-        print(f"\n{'─'*60}\n{region['label']} — 切换到: {best} ({latency}ms)\n{'─'*60}")
-        switch_to(best)
-        time.sleep(0.5)
-        print(f"    当前: {get_current_node()}")
+            latency = test_latency(best)
+            print(f"\n{'─'*60}\n{region['label']} — 切换到: {best} ({latency}ms)\n{'─'*60}")
+            switch_to(best)
+            time.sleep(0.5)
+            print(f"    当前: {get_current_node()}")
+        else:
+            print(f"\n{'─'*60}\n{region['label']}（直连模式）\n{'─'*60}")
 
         bc = region["codes"][0]
         results = scan_region(region["codes"], bc[1], bc[2], collect_price)
@@ -580,8 +602,8 @@ def run_scan(target_region=None, auto_open=False, collect_price=True):
     # 保存到文件
     _save_results(working, mode)
 
-    # 切回 US
-    if not target_region:
+    # 切回 US（仅在 Clash 模式下）
+    if not DISABLE_CLASH and not target_region:
         us_node = pick_best_node(all_nodes, ["美国", "🇺🇸"])
         if us_node:
             switch_to(us_node)

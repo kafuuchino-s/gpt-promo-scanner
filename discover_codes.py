@@ -629,31 +629,41 @@ def verify_prices(found_codes, country_code):
     cc = country_code.lower()
     info = COUNTRIES.get(country_code, {})
 
+    disable_clash = config.get_disable_clash()
+
     from auto_scan import (
-        switch_to, list_nodes, get_current_node, get_clash_mode,
         try_checkout, fetch_metadata, extract_price_info,
         get_base_checkout, format_price_line, format_usd_line,
     )
 
-    cur, nodes = list_nodes()
-    region_keywords = {
-        "GB": ["英国", "🇬🇧"],
-        "US": ["美国", "🇺🇸"],
-        # 扩展...
-    }
-    keywords = region_keywords.get(country_code, [country_code])
+    if not disable_clash:
+        from auto_scan import (
+            switch_to, list_nodes, get_current_node, get_clash_mode,
+        )
 
-    matched = [n for n in nodes for kw in keywords if kw in n]
-    if not matched:
-        print(f"\n⚠️  找不到 {country_code} 节点，跳过价格验证")
-        return found_codes
+        cur, nodes = list_nodes()
+        region_keywords = {
+            "GB": ["英国", "🇬🇧"],
+            "US": ["美国", "🇺🇸"],
+            # 扩展...
+        }
+        keywords = region_keywords.get(country_code, [country_code])
 
-    print(f"\n{'='*60}")
-    print(f"🔄 切到 {country_code} 节点验证价格")
-    print(f"{'='*60}")
-    switch_to(matched[0])
-    time.sleep(0.5)
-    print(f"  当前节点: {get_current_node()}")
+        matched = [n for n in nodes for kw in keywords if kw in n]
+        if not matched:
+            print(f"\n⚠️  找不到 {country_code} 节点，跳过价格验证")
+            return found_codes
+
+        print(f"\n{'='*60}")
+        print(f"🔄 切到 {country_code} 节点验证价格")
+        print(f"{'='*60}")
+        switch_to(matched[0])
+        time.sleep(0.5)
+        print(f"  当前节点: {get_current_node()}")
+    else:
+        print(f"\n{'='*60}")
+        print(f"🔄 验证价格（直连模式 — Clash 已禁用）")
+        print(f"{'='*60}")
 
     enriched = []
     for entry in found_codes:

@@ -16,6 +16,8 @@ token = ""
 [clash]
 # Clash Verge 的 Unix socket 路径
 socket = "/tmp/verge/verge-mihomo.sock"
+# 设为 true 可完全禁用 Clash 节点切换（服务器本身已在目标国家时使用）
+disable = false
 
 # 代理组名（取决于你的 Clash 配置）
 [clash.proxy_groups]
@@ -25,3 +27,5 @@ global = "GLOBAL"
 [proxy]
 # HTTP 代理地址（curl_cffi 通过此代理发出请求）
 url = "http://127.0.0.1:7890"
+# 设为 true 可禁用 HTTP 代理（直连网络，无需本地代理服务）
+disable = false
