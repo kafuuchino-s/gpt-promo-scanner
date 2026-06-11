@@ -1,0 +1,32 @@
+# US 候选公司名单 — 中小型 MSP / AI SaaS
+# 每行一个公司名，自动生成 base+us 后缀和裸码
+thinktechnologies
+monicaisystems
+alongsideai
+talentgenius
+searchkings
+blend360
+composeai
+harpaai
+glaspai
+mindstudio
+seamlessai
+kromio
+logicallyinc
+neteffect
+nexigen
+bitbybit
+cybersolutions
+methodtechnology
+techmedics
+andromedatechnology
+ntiva
+electric
+nexustek
+techmd
+corsicatechnologies
+appliedtech
+synoptek
+grainsfield
+novigosolutions
+aibuildgroup
