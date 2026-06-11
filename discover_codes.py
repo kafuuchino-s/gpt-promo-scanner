@@ -728,6 +728,36 @@ def _save_prev_candidates(candidates):
             f.write(c + "\n")
 
 
+def _build_from_file(filepath, country_code, dedup_set=None):
+    """从文件读取公司名，生成候选码列表"""
+    names = set()
+    try:
+        with open(filepath) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or line.startswith("//"):
+                    continue
+                variants = normalize(line)
+                for v in variants:
+                    if len(v) < 3:
+                        continue
+                    names.add(v + country_code.lower())
+                    names.add(v)
+    except FileNotFoundError:
+        print(f"❌ 文件不存在: {filepath}")
+        sys.exit(1)
+
+    if dedup_set:
+        old_count = len(names)
+        names -= dedup_set
+        removed = old_count - len(names)
+        if removed:
+            print(f"  🔄 去重: 移除 {removed} 个已测码, 剩余 {len(names)} 个新候选")
+
+    names = {n for n in names if len(n) >= 4}
+    return sorted(names)
+
+
 def main():
     if "--list" in sys.argv:
         print("支持的国家:")
@@ -739,6 +769,13 @@ def main():
     preview = "--preview" in sys.argv
     code_only = "--code-only" in sys.argv
     gen_old = "--gen-old" in sys.argv
+
+    # --from-file: 从文件读取公司名
+    from_file = None
+    for i, arg in enumerate(sys.argv):
+        if arg == "--from-file" and i + 1 < len(sys.argv):
+            from_file = sys.argv[i + 1]
+            break
 
     # ── --cross: 全矩阵交叉扫描（不需要指定国家）──
     if "--cross" in sys.argv:
@@ -808,6 +845,7 @@ def main():
         print("      python discover_codes.py GB --auto-scan")
         print("      python discover_codes.py GB --preview")
         print("      python discover_codes.py GB --gen-old")
+        print("      python discover_codes.py US --from-file companies.txt")
         print("      python discover_codes.py --cross")
         print("      python discover_codes.py --list")
         sys.exit(1)
@@ -819,8 +857,12 @@ def main():
     else:
         print("⚠️  未找到去重文件，可能包含已测码")
 
-    candidates = build_candidates(target, dedup_set)
-    print(f"\n📍 目标地区: {COUNTRIES[target]['name']} ({target})")
+    if from_file:
+        candidates = _build_from_file(from_file, target, dedup_set)
+        print(f"\n📍 目标地区: {COUNTRIES[target]['name']} ({target}) — 从文件: {from_file}")
+    else:
+        candidates = build_candidates(target, dedup_set)
+        print(f"\n📍 目标地区: {COUNTRIES[target]['name']} ({target})")
     print(f"📋 候选码数: {len(candidates)}")
 
     if preview:
