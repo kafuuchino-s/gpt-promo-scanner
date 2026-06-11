@@ -507,8 +507,9 @@ def validate_token():
 
     token = _load_token()
     session = cffi_requests.Session(impersonate="chrome136")
-    proxy_url = config.get_proxy_url()
-    session.proxies = {"https": proxy_url, "http": proxy_url}
+    if not config.get_disable_proxy():
+        proxy_url = config.get_proxy_url()
+        session.proxies = {"https": proxy_url, "http": proxy_url}
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         "Accept": "application/json",
@@ -571,8 +572,9 @@ def batch_check(candidates, delay=0.2):
         sys.exit(1)
 
     session = cffi_requests.Session(impersonate="chrome136")
-    proxy_url = config.get_proxy_url()
-    session.proxies = {"https": proxy_url, "http": proxy_url}
+    if not config.get_disable_proxy():
+        proxy_url = config.get_proxy_url()
+        session.proxies = {"https": proxy_url, "http": proxy_url}
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         "Accept": "application/json",
