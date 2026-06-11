@@ -287,10 +287,11 @@ def _make_session():
 
 def _headers():
     return {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
         "Accept": "application/json",
         "Authorization": f"Bearer {_get_token()}",
         "Content-Type": "application/json",
+        "Referer": "https://chatgpt.com/",
     }
 
 

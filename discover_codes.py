@@ -511,9 +511,10 @@ def validate_token():
         proxy_url = config.get_proxy_url()
         session.proxies = {"https": proxy_url, "http": proxy_url}
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
         "Accept": "application/json",
         "Authorization": f"Bearer {token}",
+        "Referer": "https://chatgpt.com/",
     }
 
     # 方法1: Session API（最可靠，不依赖任何促销码）
@@ -576,9 +577,10 @@ def batch_check(candidates, delay=0.2):
         proxy_url = config.get_proxy_url()
         session.proxies = {"https": proxy_url, "http": proxy_url}
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
         "Accept": "application/json",
         "Authorization": f"Bearer {token}",
+        "Referer": "https://chatgpt.com/",
     }
 
     results = {}
